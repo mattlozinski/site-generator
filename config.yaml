@@ -1,0 +1,7 @@
+source: content
+static: static
+layout: layout
+output: public
+index_name: home
+
+siteTitle: mattlozinski

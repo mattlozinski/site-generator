@@ -1,0 +1,22 @@
+#!/usr/bin/python3
+import os
+import sys
+import subprocess
+
+if __name__ == "__main__":
+    if len(sys.argv) > 1:
+        path = sys.argv[1]
+        filename = os.path.basename(path).replace('-', ' ').replace(".md", '')
+    else:
+        sys.exit(1)
+    
+    if not os.path.exists(path):
+        date = subprocess.run(["date", "--iso-8601"], capture_output=True, text=True).stdout
+        with open(path, 'w') as f:
+            f.write("---\n")
+            f.write(f"date: {date}")
+            f.write(f"title: {filename}\n")
+            f.write("---\n")
+    else:
+        print(f"{path} exists")
+        sys.exit(1)
