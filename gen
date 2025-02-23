@@ -43,7 +43,8 @@ def convert(origin, dest_dir):
 def gen_list(path, output_dir):
     list_name = os.path.basename(path)
     output_dir = os.path.join(output_dir, list_name)
-    os.mkdir(output_dir)
+    if not os.path.isdir(output_dir):
+        os.mkdir(output_dir)
     metadata = []
     for filename in os.listdir(path):
         origin = os.path.join(path, filename)
@@ -79,11 +80,11 @@ if __name__ == "__main__":
     config = load_config(config_path)
 
     # clear output dir
-    try:
-        os.mkdir(config["output"])
-    except FileExistsError:
-        shutil.rmtree(config["output"])
-        os.mkdir(config["output"])
+    # try:
+    #     os.mkdir(config["output"])
+    # except FileExistsError:
+    #     shutil.rmtree(config["output"])
+    #     os.mkdir(config["output"])
 
     # copy all static files to output dir
     shutil.copytree(config["static"], config["output"], dirs_exist_ok=True)
