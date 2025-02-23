@@ -23,6 +23,7 @@ def convert(origin, dest_dir):
     if match:
         metadata = yaml.safe_load(match.group(1))
         metadata["date"] = metadata["date"].isoformat()
+        metadata["filename"] = filename
         content = match.group(2)
     else:
         metadata["title"] = "mattlozinski"
@@ -32,6 +33,7 @@ def convert(origin, dest_dir):
         temp = temp.replace("{{ "+exp+" }}", metadata[exp])
     with open(os.path.join(dest_dir, filename), "w") as file:
         file.write(temp)
+    print(f">>> written {filename}")
     return metadata
 
 def gen_list(path, output_dir):
@@ -39,10 +41,28 @@ def gen_list(path, output_dir):
     output_dir = os.path.join(output_dir, list_name)
     print(f"{list_name} (list) -> {output_dir}")
     os.mkdir(output_dir)
+    metadata = []
     for filename in os.listdir(path):
         origin = os.path.join(path, filename)
         if not os.path.isdir(origin) and origin.endswith(".md"):
-            convert(origin, output_dir)
+            meta = convert(origin, output_dir)
+            if meta != {}:
+                metadata.append(meta)
+
+    temp = open("layout/list.html", "r").read()
+    temp = temp.replace("{{ title }}", list_name)
+    list_entries = ""
+    entry_layout = open("layout/entry.html", "r").read()
+    for meta in metadata:
+        curr = entry_layout
+        curr = curr.replace("{{ link }}", os.path.join("/", list_name, meta["filename"]))
+        print(curr)
+        for m in meta:
+            curr = curr.replace("{{ "+m+" }}", meta[m])
+        list_entries += curr
+    temp = temp.replace("{{ list }}", list_entries)
+    with open(os.path.join(output_dir, "index.html"), "w") as file:
+        file.write(temp)
 
 if __name__ == "__main__":
 
