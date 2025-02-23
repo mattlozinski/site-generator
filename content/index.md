@@ -1,2 +1,1 @@
-a little about me
-main page
+currently learning colemak on [keybr](https://www.keybr.com/)
