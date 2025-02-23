@@ -1,4 +1,4 @@
-how to reach *me*?
+how to reach me
 
 discord: [uwusnyslodziak](discord.com/users/uwusnyslodziak)
 
